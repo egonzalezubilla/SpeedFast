@@ -11,35 +11,25 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Pedido nPedido1 = new Pedido();
-        Pedido nPedido2 = new PedidoComida();
-        Pedido nPedido3 = new PedidoEncomienda();
-        Pedido nPedido4 = new PedidoExpress();
-        String nombreRepartidor = "Turanga Leela";
 
-        nPedido1.asignarRepartidor();
-        nPedido1.asignarRepartidor(nombreRepartidor);
-
-        System.out.println("\n---- o ----\n");
-        
-        nombreRepartidor = "Phillip J. Fry";
-        nPedido2.asignarRepartidor();
-        nPedido2.asignarRepartidor(nombreRepartidor);
         
         System.out.println("\n---- o ----\n");
         
-        nombreRepartidor = "Bender Rodriguez";
-        nPedido3.asignarRepartidor();
-        nPedido3.asignarRepartidor(nombreRepartidor);
+        Pedido nPedido1 = new PedidoComida("P001","Combo Hamburguesa Doble","Baker Street 221B", 12.0,0.0);
+        nPedido1.calcularTiempoEntrega();
+        nPedido1.mostrarResumen();
         
         System.out.println("\n---- o ----\n");
         
-        nombreRepartidor = "Hubert Farnsworth";
-        nPedido4.asignarRepartidor();
-        nPedido4.asignarRepartidor(nombreRepartidor);
+        Pedido nPedido2 = new PedidoEncomienda("P002","Encomienda rapida","Evergreen Av. 742",25.0,0.0);
+        nPedido2.calcularTiempoEntrega();
+        nPedido2.mostrarResumen();
         
+        System.out.println("\n---- o ----\n");
         
-        
+        Pedido nPedido3 = new PedidoExpress("P003","Peces vivos","P.Sherman, Calle Wallaby 42, Sidney",3.0,0.0);
+        nPedido3.calcularTiempoEntrega();
+        nPedido3.mostrarResumen();
     }
 
 }

@@ -1,18 +1,23 @@
 package model;
 
-public class Pedido {
+public abstract class Pedido {
 
     private String idPedido;
     private String tipoPedido;
-    private String dirPedido;
+    private String direccionPedido;
+    private double distanciaKm;
+    private double tiempoEntrega;
 
     public Pedido() {
     }
 
-    public Pedido(String idPedido, String tipoPedido, String dirPedido) {
+    public Pedido(String idPedido, String tipoPedido, String direccionPedido, double distanciaKm, double tiempoEntrega) {
         this.idPedido = idPedido;
         this.tipoPedido = tipoPedido;
-        this.dirPedido = dirPedido;
+        this.direccionPedido = direccionPedido;
+        this.distanciaKm = distanciaKm;
+        this.tiempoEntrega = tiempoEntrega;
+
     }
 
     public void asignarRepartidor() {
@@ -22,6 +27,15 @@ public class Pedido {
     public void asignarRepartidor(String nombreRepartidor) {
         System.out.println("Repartidor encontrado! " + nombreRepartidor + " enviara el pedido.");
     }
+
+    public void mostrarResumen() {
+        System.out.println("--- RESUMEN DEL PEDIDO ---");
+        System.out.println("ID Pedido: " + idPedido);
+        System.out.println("Tipo de Pedido: " + tipoPedido);
+        System.out.println("Direccion: " + direccionPedido);
+    }
+
+    public abstract void calcularTiempoEntrega();
 
     public String getIdPedido() {
         return idPedido;
@@ -39,12 +53,30 @@ public class Pedido {
         this.tipoPedido = tipoPedido;
     }
 
-    public String getDirPedido() {
-        return dirPedido;
+    public String getDireccionPedido() {
+        return direccionPedido;
     }
 
-    public void setDirPedido(String dirPedido) {
-        this.dirPedido = dirPedido;
+    public void setDireccionPedido(String direccionPedido) {
+        this.direccionPedido = direccionPedido;
     }
 
+    public double getDistanciaKm() {
+        return distanciaKm;
+    }
+
+    public void setDistanciaKm(double distanciaKm) {
+        this.distanciaKm = distanciaKm;
+    }
+
+    public double getTiempoEntrega() {
+        return tiempoEntrega;
+    }
+
+    public void setTiempoEntrega(double tiempoEntrega) {
+        this.tiempoEntrega = tiempoEntrega;
+    }
+
+    
+    
 }
