@@ -1,4 +1,4 @@
-Evaluación Formativa 1 - SpeedFast
+Evaluación Formativa 2 - SpeedFast
 
 
 
@@ -20,21 +20,11 @@ Sede: Sede Online
 
 Este proyecto implementa un sistema de gestión para la empresa de reparto a domicilio SpeedFast. La aplicación utiliza los pilares de la Programación Orientada a Objetos (POO) en Java para gestionar tres tipos de pedidos:
 
-
-
-Comida: Requiere validación de mochila térmica.
-
-
-
-Encomiendas: Requiere validación de peso y embalaje.
+Comida, Encomiendas y Compras Express.
 
 
 
-Compras Express: Requiere la búsqueda del repartidor más cercano con disponibilidad inmediata.
-
-
-
-El núcleo funcional aplica polimorfismo mediante un método asignarRepartidor(), el cual presenta comportamientos diferenciados (sobreescritura) según el tipo de pedido, además de incluir sobrecarga de métodos para procesar la asignación personalizada por nombre de repartidor.
+El núcleo funcional se ha actualizado para implementar una clase abstracta (Pedido) además de métodos como mostrarResumen() y el método abstracto calcularTiempoEntrega() que se implementa de forma diferente en cada una de las subclases.
 
 
 
@@ -44,7 +34,7 @@ El sistema está diseñado bajo un enfoque modular para garantizar escalabilidad
 
 
 
-model: Define la jerarquía de clases (Pedido como clase base, con PedidoComida, PedidoEncomienda y PedidoExpress como subclases).
+model: Define la jerarquía de clases (Pedido como abstracta, con PedidoComida, PedidoEncomienda y PedidoExpress como subclases).
 
 
 
@@ -72,7 +62,7 @@ GitHub: https://github.com/egonzalezubilla/SpeedFast.git
 
 
 
-Fecha de entrega: 17/08/2026
+Fecha de entrega: 24/08/2026
 
 
 
