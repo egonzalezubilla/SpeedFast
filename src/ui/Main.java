@@ -1,5 +1,7 @@
 package ui;
 
+import data.GestorDeEnvios;
+import data.RegistroEnvios;
 import model.Pedido;
 import model.PedidoComida;
 import model.PedidoEncomienda;
@@ -12,24 +14,32 @@ public class Main {
      */
     public static void main(String[] args) {
 
+        RegistroEnvios registro = new RegistroEnvios();
+        GestorDeEnvios gestor = new GestorDeEnvios(registro);
+
         
-        System.out.println("\n---- o ----\n");
+        Pedido nPedido1 = new PedidoComida("P001","Combo Hamburguesa Doble","Baker Street 221B", 12.0,0.0,"");
+        Pedido nPedido2 = new PedidoEncomienda("P002","Encomienda rapida","Evergreen Av. 742",25.0,0.0,"");
+        Pedido nPedido3 = new PedidoExpress("P003","Peces vivos","P.Sherman, Calle Wallaby 42, Sidney",3.0,0.0,"");
+    
+        Pedido[] pedidos = new Pedido[3];
+        pedidos[0] = nPedido1;
+        pedidos[1] = nPedido2;
+        pedidos[2] = nPedido3;
         
-        Pedido nPedido1 = new PedidoComida("P001","Combo Hamburguesa Doble","Baker Street 221B", 12.0,0.0);
-        nPedido1.calcularTiempoEntrega();
-        nPedido1.mostrarResumen();
+        nPedido1.setNombreRepartidor("Walter Klose");
+        nPedido2.setNombreRepartidor("Tina Delousse");
+        nPedido3.setNombreRepartidor("Courtis Nah");
         
-        System.out.println("\n---- o ----\n");
+        for (Pedido pedido : pedidos) {
+            pedido.procesarEnvio();
+        }
         
-        Pedido nPedido2 = new PedidoEncomienda("P002","Encomienda rapida","Evergreen Av. 742",25.0,0.0);
-        nPedido2.calcularTiempoEntrega();
-        nPedido2.mostrarResumen();
+        gestor.despachar(nPedido1);
+        gestor.despachar(nPedido2);
+        gestor.cancelar(nPedido3);
         
-        System.out.println("\n---- o ----\n");
-        
-        Pedido nPedido3 = new PedidoExpress("P003","Peces vivos","P.Sherman, Calle Wallaby 42, Sidney",3.0,0.0);
-        nPedido3.calcularTiempoEntrega();
-        nPedido3.mostrarResumen();
+        registro.verHistorial();
     }
 
 }

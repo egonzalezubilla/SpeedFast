@@ -5,8 +5,10 @@
         <group>
             <file>file:/C:/Users/Elías%20González/Documents/NetBeansProjects/SpeedFast/src/ui/Main.java</file>
             <file>file:/C:/Users/Elías%20González/Documents/NetBeansProjects/SpeedFast/src/model/Pedido.java</file>
-            <file>file:/C:/Users/Elías%20González/Documents/NetBeansProjects/SpeedFast/src/model/PedidoEncomienda.java</file>
+            <file>file:/C:/Users/Elías%20González/Documents/NetBeansProjects/SpeedFast/src/data/GestorDeEnvios.java</file>
+            <file>file:/C:/Users/Elías%20González/Documents/NetBeansProjects/SpeedFast/src/data/RegistroEnvios.java</file>
             <file>file:/C:/Users/Elías%20González/Documents/NetBeansProjects/SpeedFast/src/model/PedidoComida.java</file>
+            <file>file:/C:/Users/Elías%20González/Documents/NetBeansProjects/SpeedFast/src/model/PedidoEncomienda.java</file>
             <file>file:/C:/Users/Elías%20González/Documents/NetBeansProjects/SpeedFast/src/model/PedidoExpress.java</file>
         </group>
     </open-files>
