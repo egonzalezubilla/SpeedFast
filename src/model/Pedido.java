@@ -1,6 +1,5 @@
 package model;
 
-
 public abstract class Pedido {
 
     private String idPedido;
@@ -8,19 +7,19 @@ public abstract class Pedido {
     private String direccionPedido;
     private double distanciaKm;
     private double tiempoEntrega;
-    private String nombreRepartidor;
+    private EstadoPedido estado;
 
     public Pedido() {
     }
 
-    public Pedido(String idPedido, String tipoPedido, String direccionPedido, double distanciaKm, double tiempoEntrega, String nombreRepartidor) {
+    public Pedido(String idPedido, String tipoPedido, String direccionPedido,
+            double distanciaKm, double tiempoEntrega, EstadoPedido estado) {
         this.idPedido = idPedido;
         this.tipoPedido = tipoPedido;
         this.direccionPedido = direccionPedido;
         this.distanciaKm = distanciaKm;
         this.tiempoEntrega = tiempoEntrega;
-        this.nombreRepartidor = "";
-
+        this.estado = EstadoPedido.PENDIENTE;
     }
 
     public void asignarRepartidor() {
@@ -43,16 +42,14 @@ public abstract class Pedido {
         System.out.println("\nID Pedido: " + idPedido);
         System.out.println("Tipo de Pedido: " + tipoPedido);
         System.out.println("Direccion: " + direccionPedido);
-        System.out.println("Repartidor: " + nombreRepartidor);
+        System.out.println("Estado de entrega: " + estado);
     }
-    
-        public void procesarEnvio() {
+
+    public void procesarEnvio() {
         calcularTiempoEntrega();
         mostrarResumen();
         asignarRepartidor();
-        asignarRepartidor(nombreRepartidor);
     }
-        
 
     public abstract void calcularTiempoEntrega();
 
@@ -96,12 +93,12 @@ public abstract class Pedido {
         this.tiempoEntrega = tiempoEntrega;
     }
 
-    public String getNombreRepartidor() {
-        return nombreRepartidor;
+    public EstadoPedido getEstado() {
+        return estado;
     }
 
-    public void setNombreRepartidor(String nombreRepartidor) {
-        this.nombreRepartidor = nombreRepartidor;
+    public void setEstado(EstadoPedido estado) {
+        this.estado = estado;
     }
 
 }

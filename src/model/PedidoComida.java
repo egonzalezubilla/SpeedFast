@@ -3,8 +3,8 @@ package model;
 public class PedidoComida extends Pedido {
 
     public PedidoComida(String idPedido, String tipoPedido, String direccionPedido, 
-            double distanciaKm, double tiempoEntrega, String nombreRepartidor) {
-        super(idPedido, tipoPedido, direccionPedido, distanciaKm, tiempoEntrega, nombreRepartidor);
+            double distanciaKm, double tiempoEntrega, EstadoPedido estado) {
+        super(idPedido, tipoPedido, direccionPedido, distanciaKm, tiempoEntrega, estado);
     }
 
     public PedidoComida() {

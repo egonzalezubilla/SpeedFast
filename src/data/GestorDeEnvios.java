@@ -15,7 +15,7 @@ public class GestorDeEnvios implements Despachable, Cancelable {
     @Override
     public void despachar(Pedido pedido) {
         System.out.println("\nEl pedido " + pedido.getIdPedido()
-                + " esta listo, sera recogido por " + pedido.getNombreRepartidor() + " en breve.");
+                + " esta listo, sera recogido en breve.");
         registro.RegistrarEnvio(pedido);
     }
 
