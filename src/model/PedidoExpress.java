@@ -2,9 +2,8 @@ package model;
 
 public class PedidoExpress extends Pedido {
 
-    public PedidoExpress(String idPedido, String tipoPedido, String direccionPedido,
-            double distanciaKm, double tiempoEntrega, EstadoPedido estado) {
-        super(idPedido, tipoPedido, direccionPedido, distanciaKm, tiempoEntrega, estado);
+    public PedidoExpress(String idPedido, String tipoPedido, String descripcion, String direccionPedido, double distanciaKm, double tiempoEntrega, EstadoPedido estado) {
+        super(idPedido, tipoPedido, descripcion, direccionPedido, distanciaKm, tiempoEntrega, estado);
     }
 
     public PedidoExpress() {

@@ -5,6 +5,7 @@ import java.util.List;
 import model.Pedido;
 
 public class ZonaDeCarga {
+
     private List<Pedido> listaPedidos;
 
     public ZonaDeCarga() {
@@ -25,5 +26,9 @@ public class ZonaDeCarga {
 
     public synchronized boolean pedidosRestantes() {
         return !listaPedidos.isEmpty();
+    }
+
+    public synchronized List<Pedido> getListaPedidos() {
+        return new ArrayList<>(listaPedidos);
     }
 }

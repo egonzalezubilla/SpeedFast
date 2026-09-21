@@ -2,16 +2,13 @@ package model;
 
 public class PedidoComida extends Pedido {
 
-    public PedidoComida(String idPedido, String tipoPedido, String direccionPedido, 
-            double distanciaKm, double tiempoEntrega, EstadoPedido estado) {
-        super(idPedido, tipoPedido, direccionPedido, distanciaKm, tiempoEntrega, estado);
+    public PedidoComida(String idPedido, String tipoPedido, String descripcion, String direccionPedido, double distanciaKm, double tiempoEntrega, EstadoPedido estado) {
+        super(idPedido, tipoPedido, descripcion, direccionPedido, distanciaKm, tiempoEntrega, estado);
     }
 
     public PedidoComida() {
     }
 
-    
-    
     @Override
     public void asignarRepartidor() {
         System.out.println("\nAsignando Repartidor para repartir comida...");
@@ -22,7 +19,7 @@ public class PedidoComida extends Pedido {
         System.out.println("Repartidor con mochila termica encontrado! "
                 + nombreRepartidor + " enviara la comida.\n");
     }
-    
+
     @Override
     public void calcularTiempoEntrega() {
         setTiempoEntrega(15 + getDistanciaKm() * 2);
