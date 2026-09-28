@@ -14,7 +14,7 @@ public class GestorDeEnvios implements Despachable, Cancelable {
 
     @Override
     public void despachar(Pedido pedido) {
-        System.out.println("\nEl pedido " + pedido.getIdPedido()
+        System.out.println("\nEl pedido " + pedido.getId()
                 + " esta listo, sera recogido en breve.");
         registro.RegistrarEnvio(pedido);
     }
@@ -22,6 +22,6 @@ public class GestorDeEnvios implements Despachable, Cancelable {
     @Override
     public void cancelar(Pedido pedido) {
         System.out.println("\nCancelando pedido...");
-        System.out.println("Pedido " + pedido.getIdPedido() + " cancelado con exito");
+        System.out.println("Pedido " + pedido.getId() + " cancelado con exito");
     }
 }

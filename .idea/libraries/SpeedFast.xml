@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="SpeedFast">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/dist/SpeedFast.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

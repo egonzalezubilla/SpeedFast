@@ -2,7 +2,7 @@ package model;
 
 public abstract class Pedido {
 
-    private String idPedido;
+    private int id;
     private String tipoPedido;
     private String descripcion;
     private String direccionPedido;
@@ -16,9 +16,20 @@ public abstract class Pedido {
         this.estado = EstadoPedido.PENDIENTE;
     }
 
-    public Pedido(String idPedido, String tipoPedido, String descripcion, String direccionPedido,
+    public Pedido(String tipoPedido, String descripcion, String direccionPedido,
             double distanciaKm, double tiempoEntrega, EstadoPedido estado) {
-        this.idPedido = idPedido;
+        this.tipoPedido = tipoPedido;
+        this.descripcion = descripcion;
+        this.direccionPedido = direccionPedido;
+        this.distanciaKm = distanciaKm;
+        this.tiempoEntrega = tiempoEntrega;
+        this.estado = (estado != null) ? estado : EstadoPedido.PENDIENTE;
+        this.repartidorAsignado = "Sin asignar";
+    }
+
+    public Pedido(int id, String tipoPedido, String descripcion, String direccionPedido,
+            double distanciaKm, double tiempoEntrega, EstadoPedido estado) {
+        this.id = id;
         this.tipoPedido = tipoPedido;
         this.descripcion = descripcion;
         this.direccionPedido = direccionPedido;
@@ -37,7 +48,7 @@ public abstract class Pedido {
     }
 
     public String obtenerInformacionCompleta() {
-        return "ID Pedido          : " + idPedido + "\n"
+        return "ID Pedido          : " + id + "\n"
                 + "Tipo de Pedido     : " + (tipoPedido != null ? tipoPedido : "General") + "\n"
                 + "Descripción        : " + (descripcion != null ? descripcion : "Sin descripción") + "\n"
                 + "Dirección          : " + direccionPedido + "\n"
@@ -49,14 +60,14 @@ public abstract class Pedido {
 
     public void mostrarResumen() {
         System.out.println("\n--- RESUMEN DEL PEDIDO ---");
-        System.out.println("ID Pedido: " + idPedido);
+        System.out.println("ID Pedido: " + id);
         System.out.println("Tipo de Pedido: " + descripcion);
         System.out.println("Direccion: " + direccionPedido);
         System.out.println("Distancia: " + distanciaKm + "Kms.");
     }
 
     public void mostrarEnvio() {
-        System.out.println("\nID Pedido: " + idPedido);
+        System.out.println("\nID Pedido: " + id);
         System.out.println("Tipo de Pedido: " + descripcion);
         System.out.println("Direccion: " + direccionPedido);
         System.out.println("Estado de entrega: " + estado);
@@ -70,12 +81,12 @@ public abstract class Pedido {
 
     public abstract void calcularTiempoEntrega();
 
-    public String getIdPedido() {
-        return idPedido;
+    public int getId() {
+        return id;
     }
 
-    public void setIdPedido(String idPedido) {
-        this.idPedido = idPedido;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getTipoPedido() {
@@ -133,5 +144,4 @@ public abstract class Pedido {
     public void setEstado(EstadoPedido estado) {
         this.estado = estado;
     }
-
 }

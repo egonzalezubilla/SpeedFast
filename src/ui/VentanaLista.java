@@ -4,28 +4,37 @@ import data.ZonaDeCarga;
 import model.Pedido;
 import java.util.List;
 import javax.swing.Timer;
+import javax.swing.table.DefaultTableModel;
 
 public class VentanaLista extends javax.swing.JFrame {
 
     private ZonaDeCarga zonaDeCarga;
     private Timer timerActualizacion;
+    private DefaultTableModel modeloTabla;
 
-    // Constructor vacío (ya no inicia el temporizador automáticamente)
     public VentanaLista() {
         initComponents();
         this.zonaDeCarga = new ZonaDeCarga();
     }
 
-    // Constructor principal que recibe la ZonaDeCarga compartida
     public VentanaLista(ZonaDeCarga zonaDeCarga) {
         initComponents();
         this.zonaDeCarga = zonaDeCarga;
+        configurarTabla();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
 
-    /**
-     * Configura e inicia el Timer para refrescar el JTextArea automáticamente
-     * cada 1 segundo.
-     */
+    private void configurarTabla() {
+        String[] columnas = {"ID", "Tipo", "Descripción", "Dirección", "Estado"};
+        modeloTabla = new DefaultTableModel(columnas, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        tblPedidos.setModel(modeloTabla);
+    }
+
     private void iniciarTemporizadorRealTime() {
         if (timerActualizacion != null && timerActualizacion.isRunning()) {
             return; // Evita crear múltiples timers si ya está activo
@@ -40,34 +49,30 @@ public class VentanaLista extends javax.swing.JFrame {
         timerActualizacion.start();
     }
 
-    /**
-     * Método centralizado que consulta la ZonaDeCarga y pinta la información
-     * detallada en el JTextArea.
-     */
     private void refrescarContenidoLista() {
-        if (zonaDeCarga == null) {
-            txtaLista.setText("Error: Zona de carga no inicializada.");
+        if (modeloTabla == null) {
             return;
         }
 
-        List<Pedido> pedidos = zonaDeCarga.getListaPedidos();
+        modeloTabla.setRowCount(0);
+
+        dao.PedidoDAO pedidoDAO = new dao.PedidoDAO();
+        List<Pedido> pedidos = pedidoDAO.listarTodos();
 
         if (pedidos == null || pedidos.isEmpty()) {
-            txtaLista.setText("No hay pedidos registrados en la zona de carga actualmente.");
             return;
         }
 
-        StringBuilder sb = new StringBuilder();
-        sb.append("========================================\n");
-        sb.append("      ESTADO ACTUAL DE LOS PEDIDOS      \n");
-        sb.append("========================================\n\n");
-
         for (Pedido p : pedidos) {
-            sb.append(p.obtenerInformacionCompleta());
-            sb.append("----------------------------------------\n");
+            Object[] fila = {
+                p.getId(),
+                p.getTipoPedido(),
+                p.getDescripcion(),
+                p.getDireccionPedido(),
+                p.getEstado()
+            };
+            modeloTabla.addRow(fila);
         }
-
-        txtaLista.setText(sb.toString());
     }
 
     /**
@@ -82,8 +87,8 @@ public class VentanaLista extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         lblLista = new javax.swing.JLabel();
         btnMenuPrincipal = new javax.swing.JButton();
-        scrLista = new javax.swing.JScrollPane();
-        txtaLista = new javax.swing.JTextArea();
+        scrTabla = new javax.swing.JScrollPane();
+        tblPedidos = new javax.swing.JTable();
         btnVerLista = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -97,9 +102,18 @@ public class VentanaLista extends javax.swing.JFrame {
             }
         });
 
-        txtaLista.setColumns(20);
-        txtaLista.setRows(5);
-        scrLista.setViewportView(txtaLista);
+        tblPedidos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        scrTabla.setViewportView(tblPedidos);
 
         btnVerLista.setText("VER LISTA DE PEDIDOS");
         btnVerLista.addActionListener(new java.awt.event.ActionListener() {
@@ -120,7 +134,7 @@ public class VentanaLista extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(scrLista)
+                            .addComponent(scrTabla)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(btnVerLista, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
                                 .addGap(18, 18, 18)
@@ -137,7 +151,7 @@ public class VentanaLista extends javax.swing.JFrame {
                     .addComponent(btnMenuPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnVerLista, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(scrLista, javax.swing.GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE)
+                .addComponent(scrTabla, javax.swing.GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -207,7 +221,7 @@ public class VentanaLista extends javax.swing.JFrame {
     private javax.swing.JButton btnVerLista;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblLista;
-    private javax.swing.JScrollPane scrLista;
-    private javax.swing.JTextArea txtaLista;
+    private javax.swing.JScrollPane scrTabla;
+    private javax.swing.JTable tblPedidos;
     // End of variables declaration//GEN-END:variables
 }

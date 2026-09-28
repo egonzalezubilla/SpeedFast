@@ -139,22 +139,48 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             return;
         }
 
-        Runnable repartidor1 = new model.Repartidor("Nicolas Massu", zonaDeCarga);
-        Runnable repartidor2 = new model.Repartidor("Mardy Fish", zonaDeCarga);
-        Runnable repartidor3 = new model.Repartidor("Fernando Gonzalez", zonaDeCarga);
+        dao.PedidoDAO pedidoDAO = new dao.PedidoDAO();
+        for (model.Pedido p : pedidoDAO.listarTodos()) {
+            if (p.getEstado() == model.EstadoPedido.PENDIENTE) {
+                pedidoDAO.actualizarEstado(p.getId(), "EN_REPARTO");
+            }
+        }
+
+        dao.RepartidorDAO repartidorDAO = new dao.RepartidorDAO();
+        java.util.List<model.Repartidor> listaRepartidores = repartidorDAO.listarTodos();
+
+        if (listaRepartidores.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "No se encontraron repartidores registrados en la base de datos.",
+                    "Error",
+                    javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        for (model.Repartidor r : listaRepartidores) {
+            r.setZonaDeCarga(zonaDeCarga);
+        }
 
         Thread hiloSimulacion = new Thread(new Runnable() {
             @Override
             public void run() {
-                java.util.concurrent.ExecutorService executor = java.util.concurrent.Executors.newFixedThreadPool(3);
-                executor.execute(repartidor1);
-                executor.execute(repartidor2);
-                executor.execute(repartidor3);
+                java.util.concurrent.ExecutorService executor = java.util.concurrent.Executors.newFixedThreadPool(listaRepartidores.size());
+
+                for (model.Repartidor r : listaRepartidores) {
+                    executor.execute(r);
+                }
 
                 executor.shutdown();
 
                 try {
                     if (executor.awaitTermination(2, java.util.concurrent.TimeUnit.MINUTES)) {
+                        dao.PedidoDAO daoFinal = new dao.PedidoDAO();
+                        for (model.Pedido p : daoFinal.listarTodos()) {
+                            if (p.getEstado() == model.EstadoPedido.EN_REPARTO) {
+                                daoFinal.actualizarEstado(p.getId(), "ENTREGADO");
+                            }
+                        }
+
                         javax.swing.JOptionPane.showMessageDialog(null,
                                 "¡Todas las entregas han sido completadas con éxito!",
                                 "Simulación Finalizada",

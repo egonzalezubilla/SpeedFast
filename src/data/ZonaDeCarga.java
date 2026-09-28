@@ -14,7 +14,7 @@ public class ZonaDeCarga {
 
     public synchronized void agregarPedido(Pedido p) {
         listaPedidos.add(p);
-        System.out.println("Pedido #" + p.getIdPedido() + " agregado. Destino: " + p.getDireccionPedido());
+        System.out.println("Pedido #" + p.getId() + " agregado. Destino: " + p.getDireccionPedido());
     }
 
     public synchronized Pedido retirarPedido() {

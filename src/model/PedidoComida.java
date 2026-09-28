@@ -2,7 +2,12 @@ package model;
 
 public class PedidoComida extends Pedido {
 
-    public PedidoComida(String idPedido, String tipoPedido, String descripcion, String direccionPedido, double distanciaKm, double tiempoEntrega, EstadoPedido estado) {
+    public PedidoComida(String tipoPedido, String descripcion, String direccionPedido,
+            double distanciaKm, double tiempoEntrega, EstadoPedido estado) {
+        super(tipoPedido, descripcion, direccionPedido, distanciaKm, tiempoEntrega, estado);
+    }
+
+    public PedidoComida(int idPedido, String tipoPedido, String descripcion, String direccionPedido, double distanciaKm, double tiempoEntrega, EstadoPedido estado) {
         super(idPedido, tipoPedido, descripcion, direccionPedido, distanciaKm, tiempoEntrega, estado);
     }
 

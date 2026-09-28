@@ -10,11 +10,11 @@ import model.PedidoExpress;
 public class VentanaRegistros extends javax.swing.JFrame {
 
     private ZonaDeCarga zonaDeCarga;
-    private static int contadorId = 1;
 
     public VentanaRegistros(ZonaDeCarga zonaDeCarga) {
         initComponents();
         this.zonaDeCarga = zonaDeCarga;
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
 
     /**
@@ -128,8 +128,6 @@ public class VentanaRegistros extends javax.swing.JFrame {
             return;
         }
 
-        String idPedido = String.format("P%06d", contadorId++);
-
         double distanciaKm = Math.round((1.0 + Math.random() * 14.0) * 10.0) / 10.0;
 
         String tipoSeleccionado = (String) cbxTipoPedido.getSelectedItem();
@@ -137,21 +135,27 @@ public class VentanaRegistros extends javax.swing.JFrame {
 
         switch (tipoSeleccionado) {
             case "Pedido Comida":
-                nuevoPedido = new PedidoComida(idPedido, tipoSeleccionado, descripcion, direccion, distanciaKm, 0.0, null);
+                nuevoPedido = new PedidoComida(tipoSeleccionado, descripcion, direccion, distanciaKm, 0.0, null);
                 break;
             case "Pedido Encomienda":
-                nuevoPedido = new PedidoEncomienda(idPedido, tipoSeleccionado, descripcion, direccion, distanciaKm, 0.0, null);
+                nuevoPedido = new PedidoEncomienda(tipoSeleccionado, descripcion, direccion, distanciaKm, 0.0, null);
                 break;
             case "Pedido Express":
-                nuevoPedido = new PedidoExpress(idPedido, tipoSeleccionado, descripcion, direccion, distanciaKm, 0.0, null);
+                nuevoPedido = new PedidoExpress(tipoSeleccionado, descripcion, direccion, distanciaKm, 0.0, null);
                 break;
         }
+
+        dao.PedidoDAO pedidoDAO = new dao.PedidoDAO();
+        int idGenerado = pedidoDAO.guardar(nuevoPedido);
 
         if (zonaDeCarga != null) {
             zonaDeCarga.agregarPedido(nuevoPedido);
         }
 
-        JOptionPane.showMessageDialog(this, "¡Pedido registrado exitosamente!\nID Asignado: " + idPedido, "Registro Exitoso", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this,
+                "¡Pedido registrado exitosamente!\nID Asignado en Base de Datos: " + idGenerado,
+                "Registro Exitoso",
+                JOptionPane.INFORMATION_MESSAGE);
 
         txtDescripcion.setText("");
         txtDireccion.setText("");
