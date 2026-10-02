@@ -1,7 +1,11 @@
 package ui;
 
 import data.ZonaDeCarga;
+import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
 import model.Pedido;
 import model.PedidoComida;
 import model.PedidoEncomienda;
@@ -10,11 +14,89 @@ import model.PedidoExpress;
 public class VentanaRegistros extends javax.swing.JFrame {
 
     private ZonaDeCarga zonaDeCarga;
+    private DefaultTableModel modeloTabla;
+    private int idPedidoSeleccionado = -1;
 
     public VentanaRegistros(ZonaDeCarga zonaDeCarga) {
         initComponents();
         this.zonaDeCarga = zonaDeCarga;
+        configurarTabla();
+        cargarPedidosTabla();
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+    }
+
+    private void configurarTabla() {
+        String[] columnas = {"ID", "Tipo", "Descripcion", "Direccion", "Estado"};
+        modeloTabla = new DefaultTableModel(columnas, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        tblPedidos.setModel(modeloTabla);
+
+        tblPedidos.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    int filaSeleccionada = tblPedidos.getSelectedRow();
+                    if (filaSeleccionada != -1) {
+                        // Validamos de manera segura cada celda para evitar nulos
+                        Object valId = modeloTabla.getValueAt(filaSeleccionada, 0);
+                        Object valTipo = modeloTabla.getValueAt(filaSeleccionada, 1);
+                        Object valDesc = modeloTabla.getValueAt(filaSeleccionada, 2);
+                        Object valDir = modeloTabla.getValueAt(filaSeleccionada, 3);
+
+                        if (valId != null) {
+                            idPedidoSeleccionado = (int) valId;
+                        }
+                        
+                        if (valTipo != null) {
+                            cbxTipoPedido.setSelectedItem(valTipo.toString());
+                        } else {
+                            cbxTipoPedido.setSelectedIndex(0);
+                        }
+
+                        if (valDesc != null) {
+                            txtDescripcion.setText(valDesc.toString());
+                        } else {
+                            txtDescripcion.setText("");
+                        }
+
+                        if (valDir != null) {
+                            txtDireccion.setText(valDir.toString());
+                        } else {
+                            txtDireccion.setText("");
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    private void cargarPedidosTabla() {
+        modeloTabla.setRowCount(0);
+        dao.PedidoDAO pedidoDAO = new dao.PedidoDAO();
+        List<Pedido> lista = pedidoDAO.listarTodos();
+        if (lista != null) {
+            for (Pedido p : lista) {
+                modeloTabla.addRow(new Object[]{
+                    p.getId(),
+                    p.getTipoPedido(),
+                    p.getDescripcion(),
+                    p.getDireccionPedido(),
+                    p.getEstado()
+                });
+            }
+        }
+    }
+
+    private void limpiarFormulario() {
+        txtDescripcion.setText("");
+        txtDireccion.setText("");
+        cbxTipoPedido.setSelectedIndex(0);
+        idPedidoSeleccionado = -1;
+        tblPedidos.clearSelection();
     }
 
     /**
@@ -36,11 +118,16 @@ public class VentanaRegistros extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         btnRegistrarNuevo = new javax.swing.JButton();
         btnMenuPrincipal = new javax.swing.JButton();
+        scrTabla = new javax.swing.JScrollPane();
+        tblPedidos = new javax.swing.JTable();
+        btnEditar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         cbxTipoPedido.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pedido Comida", "Pedido Encomienda", "Pedido Express" }));
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setText("REGISTRAR PEDIDO");
 
         jLabel2.setText("¿Que tipo de pedido es?");
@@ -63,46 +150,95 @@ public class VentanaRegistros extends javax.swing.JFrame {
             }
         });
 
+        tblPedidos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        scrTabla.setViewportView(tblPedidos);
+
+        btnEditar.setText("EDITAR PEDIDO");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
+
+        btnEliminar.setText("ELIMINAR PEDIDO");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelRegistroLayout = new javax.swing.GroupLayout(panelRegistro);
         panelRegistro.setLayout(panelRegistroLayout);
         panelRegistroLayout.setHorizontalGroup(
             panelRegistroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelRegistroLayout.createSequentialGroup()
                 .addGap(26, 26, 26)
-                .addGroup(panelRegistroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtDescripcion)
-                    .addComponent(txtDireccion)
-                    .addComponent(cbxTipoPedido, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(panelRegistroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnRegistrarNuevo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnMenuPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE))
-                .addContainerGap(24, Short.MAX_VALUE))
+                    .addGroup(panelRegistroLayout.createSequentialGroup()
+                        .addGroup(panelRegistroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelRegistroLayout.createSequentialGroup()
+                                .addGroup(panelRegistroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(panelRegistroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(btnMenuPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
+                                        .addComponent(btnRegistrarNuevo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(txtDireccion)
+                                        .addComponent(btnEditar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cbxTipoPedido, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 12, Short.MAX_VALUE))
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(scrTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 362, javax.swing.GroupLayout.PREFERRED_SIZE))))
+            .addGroup(panelRegistroLayout.createSequentialGroup()
+                .addGap(196, 196, 196)
+                .addComponent(jLabel1)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         panelRegistroLayout.setVerticalGroup(
             panelRegistroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelRegistroLayout.createSequentialGroup()
                 .addGap(18, 18, 18)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(cbxTipoPedido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnRegistrarNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnMenuPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(66, Short.MAX_VALUE))
+                .addGroup(panelRegistroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelRegistroLayout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addComponent(scrTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addGroup(panelRegistroLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbxTipoPedido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnRegistrarNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(26, 26, 26)
+                        .addComponent(btnMenuPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 54, Short.MAX_VALUE)))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -152,19 +288,79 @@ public class VentanaRegistros extends javax.swing.JFrame {
             zonaDeCarga.agregarPedido(nuevoPedido);
         }
 
+        cargarPedidosTabla();
+        limpiarFormulario();
+
         JOptionPane.showMessageDialog(this,
                 "¡Pedido registrado exitosamente!\nID Asignado en Base de Datos: " + idGenerado,
                 "Registro Exitoso",
                 JOptionPane.INFORMATION_MESSAGE);
-
-        txtDescripcion.setText("");
-        txtDireccion.setText("");
-        cbxTipoPedido.setSelectedIndex(0);
     }//GEN-LAST:event_btnRegistrarNuevoActionPerformed
 
     private void btnMenuPrincipalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuPrincipalActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnMenuPrincipalActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        if (idPedidoSeleccionado == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione un pedido de la tabla para editar.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String descripcion = txtDescripcion.getText().trim();
+        String direccion = txtDireccion.getText().trim();
+
+        if (descripcion.isEmpty() || direccion.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Los campos de descripcion y direccion no pueden estar vacios.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        dao.PedidoDAO pedidoDAO = new dao.PedidoDAO();
+
+        // Buscamos el pedido en la lista ya que PedidoDAO no incluye buscarPorId
+        Pedido pedido = null;
+        for (Pedido p : pedidoDAO.listarTodos()) {
+            if (p.getId() == idPedidoSeleccionado) {
+                pedido = p;
+                break;
+            }
+        }
+
+        if (pedido != null) {
+            pedido.setTipoPedido((String) cbxTipoPedido.getSelectedItem());
+            pedido.setDescripcion(descripcion);
+            pedido.setDireccionPedido(direccion);
+
+            // Metodo correcto definido en PedidoDAO
+            pedidoDAO.actualizarRegistro(pedido);
+            cargarPedidosTabla();
+            limpiarFormulario();
+
+            JOptionPane.showMessageDialog(this, "Pedido modificado exitosamente!", "Exito", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        if (idPedidoSeleccionado == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione un pedido de la tabla para eliminar.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(this, "Desea eliminar el pedido ID " + idPedidoSeleccionado + "?", "Confirmar eliminacion", JOptionPane.YES_NO_OPTION);
+        
+        if (confirm == JOptionPane.YES_OPTION) {
+            dao.PedidoDAO pedidoDAO = new dao.PedidoDAO();
+            boolean eliminado = pedidoDAO.eliminarRegistro(idPedidoSeleccionado);
+            
+            if (eliminado) {
+                cargarPedidosTabla();
+                limpiarFormulario();
+                JOptionPane.showMessageDialog(this, "Pedido eliminado exitosamente!", "Exito", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "No se puede eliminar el pedido porque esta asociado a una entrega activa.", "Error de eliminacion", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -203,6 +399,8 @@ public class VentanaRegistros extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnMenuPrincipal;
     private javax.swing.JButton btnRegistrarNuevo;
     private javax.swing.JComboBox<String> cbxTipoPedido;
@@ -211,6 +409,8 @@ public class VentanaRegistros extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel panelRegistro;
+    private javax.swing.JScrollPane scrTabla;
+    private javax.swing.JTable tblPedidos;
     private javax.swing.JTextField txtDescripcion;
     private javax.swing.JTextField txtDireccion;
     // End of variables declaration//GEN-END:variables

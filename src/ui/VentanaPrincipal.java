@@ -26,11 +26,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         lblTitulo = new javax.swing.JLabel();
         lblTexto2 = new javax.swing.JLabel();
         lblTexto1 = new javax.swing.JLabel();
+        btnRepartidores = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         btnRegistrarPedido.setFont(new java.awt.Font("Segoe UI Symbol", 1, 18)); // NOI18N
-        btnRegistrarPedido.setText("REGISTRAR NUEVO PEDIDO");
+        btnRegistrarPedido.setText("PEDIDOS");
         btnRegistrarPedido.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRegistrarPedidoActionPerformed(evt);
@@ -38,7 +39,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         });
 
         btnVerPedidos.setFont(new java.awt.Font("Segoe UI Emoji", 1, 18)); // NOI18N
-        btnVerPedidos.setText("VER PEDIDOS");
+        btnVerPedidos.setText("ENTREGAS");
         btnVerPedidos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnVerPedidosActionPerformed(evt);
@@ -74,6 +75,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         lblTexto1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblTexto1.setText("¡BIENVENIDO!");
 
+        btnRepartidores.setFont(new java.awt.Font("Segoe UI Symbol", 1, 18)); // NOI18N
+        btnRepartidores.setText("REPARTIDORES");
+        btnRepartidores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRepartidoresActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelPrincipalLayout = new javax.swing.GroupLayout(panelPrincipal);
         panelPrincipal.setLayout(panelPrincipalLayout);
         panelPrincipalLayout.setHorizontalGroup(
@@ -87,7 +96,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                     .addComponent(btnRegistrarPedido, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lblTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lblTexto2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblTexto1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(lblTexto1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnRepartidores, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(56, 56, 56))
         );
         panelPrincipalLayout.setVerticalGroup(
@@ -95,10 +105,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             .addGroup(panelPrincipalLayout.createSequentialGroup()
                 .addGap(16, 16, 16)
                 .addComponent(lblTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(39, 39, 39)
+                .addGap(18, 18, 18)
                 .addComponent(lblTexto1)
-                .addGap(62, 62, 62)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblTexto2)
+                .addGap(21, 21, 21)
+                .addComponent(btnRepartidores, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnRegistrarPedido, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -218,6 +230,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnSalirActionPerformed
 
+    private void btnRepartidoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRepartidoresActionPerformed
+        VentanaRepartidores ventanaRepartidores = new VentanaRepartidores();
+        ventanaRepartidores.setVisible(true);
+    }//GEN-LAST:event_btnRepartidoresActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -256,6 +273,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIniciarReparto;
     private javax.swing.JButton btnRegistrarPedido;
+    private javax.swing.JButton btnRepartidores;
     private javax.swing.JButton btnSalir;
     private javax.swing.JButton btnVerPedidos;
     private javax.swing.JLabel lblTexto1;

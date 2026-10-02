@@ -48,6 +48,7 @@
                       <Component id="lblTitulo" alignment="0" max="32767" attributes="0"/>
                       <Component id="lblTexto2" max="32767" attributes="0"/>
                       <Component id="lblTexto1" max="32767" attributes="0"/>
+                      <Component id="btnRepartidores" alignment="1" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
               </Group>
@@ -58,10 +59,12 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
                   <Component id="lblTitulo" min="-2" pref="51" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="lblTexto1" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="62" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="lblTexto2" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+                  <Component id="btnRepartidores" min="-2" pref="50" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="btnRegistrarPedido" min="-2" pref="50" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -81,7 +84,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI Symbol" size="18" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="REGISTRAR NUEVO PEDIDO"/>
+            <Property name="text" type="java.lang.String" value="PEDIDOS"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRegistrarPedidoActionPerformed"/>
@@ -92,7 +95,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI Emoji" size="18" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="VER PEDIDOS"/>
+            <Property name="text" type="java.lang.String" value="ENTREGAS"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnVerPedidosActionPerformed"/>
@@ -149,6 +152,17 @@
             <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="text" type="java.lang.String" value="&#xa1;BIENVENIDO!"/>
           </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="btnRepartidores">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI Symbol" size="18" style="1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="REPARTIDORES"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRepartidoresActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

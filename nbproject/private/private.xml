@@ -3,13 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/TECH%7D/OneDrive/Documentos/NetBeansProjects/SpeedFast/src/ui/Main.java</file>
-            <file>file:/C:/Users/TECH%7D/OneDrive/Documentos/NetBeansProjects/SpeedFast/src/model/Repartidor.java</file>
-            <file>file:/C:/Users/TECH%7D/OneDrive/Documentos/NetBeansProjects/SpeedFast/src/dao/EntregaDAO.java</file>
-            <file>file:/C:/Users/TECH%7D/OneDrive/Documentos/NetBeansProjects/SpeedFast/src/data/ZonaDeCarga.java</file>
-            <file>file:/C:/Users/TECH%7D/OneDrive/Documentos/NetBeansProjects/SpeedFast/src/data/GestorDeEnvios.java</file>
-            <file>file:/C:/Users/TECH%7D/OneDrive/Documentos/NetBeansProjects/SpeedFast/src/dao/PedidoDAO.java</file>
             <file>file:/C:/Users/TECH%7D/OneDrive/Documentos/NetBeansProjects/SpeedFast/src/ui/VentanaPrincipal.java</file>
+            <file>file:/C:/Users/TECH%7D/OneDrive/Documentos/NetBeansProjects/SpeedFast/src/ui/VentanaRepartidores.java</file>
+            <file>file:/C:/Users/TECH%7D/OneDrive/Documentos/NetBeansProjects/SpeedFast/src/ui/VentanaRegistros.java</file>
+            <file>file:/C:/Users/TECH%7D/OneDrive/Documentos/NetBeansProjects/SpeedFast/src/ui/VentanaLista.java</file>
+            <file>file:/C:/Users/TECH%7D/OneDrive/Documentos/NetBeansProjects/SpeedFast/src/dao/PedidoDAO.java</file>
         </group>
     </open-files>
 </project-private>

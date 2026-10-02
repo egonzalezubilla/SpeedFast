@@ -1,15 +1,14 @@
+
 package ui;
 
 import data.ZonaDeCarga;
-import model.Pedido;
 import java.util.List;
-import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
+
 
 public class VentanaLista extends javax.swing.JFrame {
 
     private ZonaDeCarga zonaDeCarga;
-    private Timer timerActualizacion;
     private DefaultTableModel modeloTabla;
 
     public VentanaLista() {
@@ -21,11 +20,12 @@ public class VentanaLista extends javax.swing.JFrame {
         initComponents();
         this.zonaDeCarga = zonaDeCarga;
         configurarTabla();
+        refrescarContenidoLista();
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
 
     private void configurarTabla() {
-        String[] columnas = {"ID", "Tipo", "Descripción", "Dirección", "Estado"};
+        String[] columnas = {"ID Entrega", "Dirección Pedido", "Repartidor", "Fecha", "Hora", "Estado"};
         modeloTabla = new DefaultTableModel(columnas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -35,20 +35,6 @@ public class VentanaLista extends javax.swing.JFrame {
         tblPedidos.setModel(modeloTabla);
     }
 
-    private void iniciarTemporizadorRealTime() {
-        if (timerActualizacion != null && timerActualizacion.isRunning()) {
-            return; // Evita crear múltiples timers si ya está activo
-        }
-
-        timerActualizacion = new Timer(1000, new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-                refrescarContenidoLista();
-            }
-        });
-        timerActualizacion.start();
-    }
-
     private void refrescarContenidoLista() {
         if (modeloTabla == null) {
             return;
@@ -56,21 +42,14 @@ public class VentanaLista extends javax.swing.JFrame {
 
         modeloTabla.setRowCount(0);
 
-        dao.PedidoDAO pedidoDAO = new dao.PedidoDAO();
-        List<Pedido> pedidos = pedidoDAO.listarTodos();
+        dao.EntregaDAO entregaDAO = new dao.EntregaDAO();
+        List<Object[]> entregas = entregaDAO.listarParaTabla();
 
-        if (pedidos == null || pedidos.isEmpty()) {
+        if (entregas == null || entregas.isEmpty()) {
             return;
         }
 
-        for (Pedido p : pedidos) {
-            Object[] fila = {
-                p.getId(),
-                p.getTipoPedido(),
-                p.getDescripcion(),
-                p.getDireccionPedido(),
-                p.getEstado()
-            };
+        for (Object[] fila : entregas) {
             modeloTabla.addRow(fila);
         }
     }
@@ -89,11 +68,13 @@ public class VentanaLista extends javax.swing.JFrame {
         btnMenuPrincipal = new javax.swing.JButton();
         scrTabla = new javax.swing.JScrollPane();
         tblPedidos = new javax.swing.JTable();
-        btnVerLista = new javax.swing.JButton();
+        btnTablaEntregas = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        lblLista.setText("LISTA DE PEDIDOS");
+        lblLista.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lblLista.setText("LISTA DE ENTREGAS");
 
         btnMenuPrincipal.setText("VOLVER AL MENU PRINCIPAL");
         btnMenuPrincipal.addActionListener(new java.awt.event.ActionListener() {
@@ -115,10 +96,17 @@ public class VentanaLista extends javax.swing.JFrame {
         ));
         scrTabla.setViewportView(tblPedidos);
 
-        btnVerLista.setText("VER LISTA DE PEDIDOS");
-        btnVerLista.addActionListener(new java.awt.event.ActionListener() {
+        btnTablaEntregas.setText("ACTUALIZAR TABLA");
+        btnTablaEntregas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnVerListaActionPerformed(evt);
+                btnTablaEntregasActionPerformed(evt);
+            }
+        });
+
+        btnEliminar.setText("ELIMINAR ENTREGA");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
             }
         });
 
@@ -128,31 +116,36 @@ public class VentanaLista extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(scrTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(lblLista, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(scrTabla)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnVerLista, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnMenuPrincipal)))
-                        .addContainerGap())))
+                    .addComponent(btnMenuPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnTablaEntregas, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(211, 211, 211)
+                .addComponent(lblLista)
+                .addContainerGap(200, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(20, 20, 20)
                 .addComponent(lblLista)
-                .addGap(26, 26, 26)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnMenuPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnVerLista, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(scrTabla, javax.swing.GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(68, 68, 68)
+                        .addComponent(scrTabla, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnTablaEntregas, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnMenuPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(101, 101, 101))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -169,56 +162,91 @@ public class VentanaLista extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnVerListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerListaActionPerformed
+    private void btnTablaEntregasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTablaEntregasActionPerformed
         refrescarContenidoLista();
-        iniciarTemporizadorRealTime();
-    }//GEN-LAST:event_btnVerListaActionPerformed
+        javax.swing.JOptionPane.showMessageDialog(this, "Tabla actualizada correctamente.", "Informacion", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_btnTablaEntregasActionPerformed
 
     private void btnMenuPrincipalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuPrincipalActionPerformed
-        if (timerActualizacion != null) {
-            timerActualizacion.stop();
-        }
         this.dispose();
     }//GEN-LAST:event_btnMenuPrincipalActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        int filaSeleccionada = tblPedidos.getSelectedRow();
+
+        if (filaSeleccionada == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Por favor, seleccione una entrega de la tabla para eliminar.",
+                    "Advertencia",
+                    javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int idEntrega = (int) modeloTabla.getValueAt(filaSeleccionada, 0);
+
+        int confirmacion = javax.swing.JOptionPane.showConfirmDialog(this,
+                "¿Está seguro de que desea eliminar la entrega ID " + idEntrega + "?",
+                "Confirmar eliminación",
+                javax.swing.JOptionPane.YES_NO_OPTION);
+
+        if (confirmacion == javax.swing.JOptionPane.YES_OPTION) {
+            dao.EntregaDAO entregaDAO = new dao.EntregaDAO();
+            boolean eliminado = entregaDAO.eliminarRegistro(idEntrega);
+
+            if (eliminado) {
+                javax.swing.JOptionPane.showMessageDialog(this,
+                        "Entrega eliminada con éxito.",
+                        "Éxito",
+                        javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                refrescarContenidoLista(); // Actualiza la vista inmediatamente
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(this,
+                        "No se pudo eliminar la entrega de la base de datos.",
+                        "Error",
+                        javax.swing.JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+    /* Set the Nimbus look and feel */
+    //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+    /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
+     */
+    try {
+        for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+            if ("Nimbus".equals(info.getName())) {
+                javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                break;
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(VentanaLista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(VentanaLista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(VentanaLista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(VentanaLista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new VentanaLista().setVisible(true);
-            }
-        });
+    } catch (ClassNotFoundException ex) {
+        java.util.logging.Logger.getLogger(VentanaLista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    } catch (InstantiationException ex) {
+        java.util.logging.Logger.getLogger(VentanaLista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    } catch (IllegalAccessException ex) {
+        java.util.logging.Logger.getLogger(VentanaLista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        java.util.logging.Logger.getLogger(VentanaLista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
     }
+    //</editor-fold>
+
+    /* Create and display the form */
+    java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+            new VentanaLista().setVisible(true);
+        }
+    });
+}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnMenuPrincipal;
-    private javax.swing.JButton btnVerLista;
+    private javax.swing.JButton btnTablaEntregas;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblLista;
     private javax.swing.JScrollPane scrTabla;
